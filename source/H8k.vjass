@@ -1,0 +1,320 @@
+
+library H8k
+	globals
+		private hashtable H = InitHashtable()
+		private integer current = 0
+		private integer max = 0
+		private integer array pointers
+	endglobals
+	private function new takes nothing returns integer
+		local integer this = current
+		if current == 0 then
+			set max = max + 1
+			set this = max
+			if this > 8190 then
+				return 0
+			endif
+		else
+			set current = pointers[this]
+		endif
+		set pointers[this] = -1
+		return this
+	endfunction
+	private function delete takes integer this returns nothing
+		if this <= 0 or pointers[this] != -1 then
+			return
+		endif
+		set pointers[this] = current
+		set current = this
+		call FlushChildHashtable(H, this)
+	endfunction
+
+struct h8k_boolean
+	static method create takes nothing returns h8k_boolean
+		return new()
+	endmethod
+	method operator [] takes integer i returns boolean
+		return LoadBoolean(H,this,i)
+	endmethod
+	method operator []= takes integer i, boolean val returns nothing
+		call SaveBoolean(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedBoolean(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_string
+	static method create takes nothing returns h8k_string
+		return new()
+	endmethod
+	method operator [] takes integer i returns string
+		return LoadStr(H,this,i)
+	endmethod
+	method operator []= takes integer i, string val returns nothing
+		call SaveStr(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedString(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_destructable
+	static method create takes nothing returns h8k_destructable
+		return new()
+	endmethod
+	method operator [] takes integer i returns destructable
+		return LoadDestructableHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, destructable val returns nothing
+		call SaveDestructableHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_effect
+	static method create takes nothing returns h8k_effect
+		return new()
+	endmethod
+	method operator [] takes integer i returns effect
+		return LoadEffectHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, effect val returns nothing
+		call SaveEffectHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_integer
+	static method create takes nothing returns h8k_integer
+		return new()
+	endmethod
+	method operator [] takes integer i returns integer
+		return LoadInteger(H,this,i)
+	endmethod
+	method operator []= takes integer i, integer val returns nothing
+		call SaveInteger(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedInteger(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_item
+	static method create takes nothing returns h8k_item
+		return new()
+	endmethod
+	method operator [] takes integer i returns item
+		return LoadItemHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, item val returns nothing
+		call SaveItemHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_lightning
+	static method create takes nothing returns h8k_lightning
+		return new()
+	endmethod
+	method operator [] takes integer i returns lightning
+		return LoadLightningHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, lightning val returns nothing
+		call SaveLightningHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_multiboard
+	static method create takes nothing returns h8k_multiboard
+		return new()
+	endmethod
+	method operator [] takes integer i returns multiboard
+		return LoadMultiboardHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, multiboard val returns nothing
+		call SaveMultiboardHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_multiboarditem
+	static method create takes nothing returns h8k_multiboarditem
+		return new()
+	endmethod
+	method operator [] takes integer i returns multiboarditem
+		return LoadMultiboardItemHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, multiboarditem val returns nothing
+		call SaveMultiboardItemHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_player
+	static method create takes nothing returns h8k_player
+		return new()
+	endmethod
+	method operator [] takes integer i returns player
+		return LoadPlayerHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, player val returns nothing
+		call SavePlayerHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_real
+	static method create takes nothing returns h8k_real
+		return new()
+	endmethod
+	method operator [] takes integer i returns real
+		return LoadReal(H,this,i)
+	endmethod
+	method operator []= takes integer i, real val returns nothing
+		call SaveReal(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedReal(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_rect
+	static method create takes nothing returns h8k_rect
+		return new()
+	endmethod
+	method operator [] takes integer i returns rect
+		return LoadRectHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, rect val returns nothing
+		call SaveRectHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_region
+	static method create takes nothing returns h8k_region
+		return new()
+	endmethod
+	method operator [] takes integer i returns region
+		return LoadRegionHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, region val returns nothing
+		call SaveRegionHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_timer
+	static method create takes nothing returns h8k_timer
+		return new()
+	endmethod
+	method operator [] takes integer i returns timer
+		return LoadTimerHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, timer val returns nothing
+		call SaveTimerHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_trigger
+	static method create takes nothing returns h8k_trigger
+		return new()
+	endmethod
+	method operator [] takes integer i returns trigger
+		return LoadTriggerHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, trigger val returns nothing
+		call SaveTriggerHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+struct h8k_unit
+	static method create takes nothing returns h8k_unit
+		return new()
+	endmethod
+	method operator [] takes integer i returns unit
+		return LoadUnitHandle(H,this,i)
+	endmethod
+	method operator []= takes integer i, unit val returns nothing
+		call SaveUnitHandle(H,this,i,val)
+	endmethod
+	method remove takes integer i returns nothing
+		call RemoveSavedHandle(H,this,i)
+	endmethod
+	method destroy takes nothing returns nothing
+		call delete(this)
+	endmethod
+endstruct
+
+endlibrary
